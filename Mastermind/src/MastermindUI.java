@@ -3,6 +3,7 @@ import java.io.IOException;
 /**
  * @author Tarik
  * @version 1.0.0 erstellt neues Mastermind-Spiel und UI
+ * @see Aufgabenbeschreibung
  */
 public class MastermindUI {
 
