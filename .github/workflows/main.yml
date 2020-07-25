@@ -27,9 +27,9 @@ jobs:
         java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
         architecture: x64 # (x64 or x86) - defaults to x64
     - run: | 
-        pwd
-        javac "./Mastermind/src/*.java"
-        jar cvf Test.jar ./Mastermind/src/*
+        cd ./Mastermind/src
+        javac "./*.java"
+        jar cvf Test.jar ./*
       
     - name: Commit files
       run: |
