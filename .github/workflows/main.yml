@@ -29,5 +29,5 @@ jobs:
     - name: compile java
       run: | 
         cd ./Mastermind/src
-        javac "./*.java"
-        jar cvf Test.jar ./*
+        javac *.java
+        jar cvf Mastermind.jar *.class
