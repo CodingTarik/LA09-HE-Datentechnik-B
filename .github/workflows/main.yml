@@ -36,6 +36,6 @@ jobs:
          git commit -m "✔Jar created" -a
 
     - name: Push changes
-       uses: ad-m/github-push-action@master
-       with:
+      uses: ad-m/github-push-action@master
+      with:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
