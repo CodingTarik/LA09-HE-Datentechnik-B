@@ -30,7 +30,7 @@ jobs:
       run: | 
         cd ./Mastermind/src
         javac *.java
-        jar cmf Mastermind.jar *.class Master
+        jar cmf Mastermind.jar *.class MANIFEST.MF
     - name: upload release
       run: |
         cd ./Mastermind/src
