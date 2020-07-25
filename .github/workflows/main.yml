@@ -38,6 +38,8 @@ jobs:
         jar cvf Mastermind.jar *.class
     - name: upload release
       run: |
+        ls
+        pwd
         zip --junk-paths my-artifact Mastermind.jar
     - name: Create Release
       id: create_release
