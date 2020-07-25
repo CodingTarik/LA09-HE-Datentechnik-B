@@ -15,7 +15,8 @@ public class Spielbrett {
         return anzahlVersuche;
     }
     /**
-     * Speichert einen neuen Versuch
+     *  bekommt als Argument ein Objekt der Klasse Versuch
+     * übergeben und speichert dieses. 
      * @author Tarik
      */
     public void protokolliereVersuch(Versuch versuch)

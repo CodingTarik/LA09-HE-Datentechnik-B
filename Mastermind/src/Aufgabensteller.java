@@ -5,7 +5,7 @@
 public class Aufgabensteller 
 {
 	/**
-	 * the random number that was generated
+	 * die zufällige Zahl die generiert wird
 	 * 
 	 * @author Nico
 	 * @version 1.0.0
