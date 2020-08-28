@@ -1,4 +1,9 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.*;
 
 /**
@@ -11,14 +16,15 @@ public class MastermindServer {
     private final int maxAnzahlVersuche = 10;
     private final Spielbrett spielbrett = new Spielbrett();
     private final int port = 12004;
-    SeverSocket socket = new SeverSocket(port);
+    ServerSocket socket;
+    Socket tcpListener;
     /**
      * Erstellt eine neue Mastermind UI
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        new MastermindUI();
+        new MastermindServer();
     }
     /**
      * UI manager für das Spiel Mastermind und startet ein neues Spiel
@@ -27,15 +33,43 @@ public class MastermindServer {
      * @author Tarik
      * @throws IOException if an {@code IOException} occures in {@link Spieler#rateZahl() rateZahl}
      */
-    public MastermindUI() throws IOException
+    public MastermindServer() throws IOException
     {
-        Socket tcpListener = socket.accept();
+    	socket = new ServerSocket(port);
+    	while(true)
+    	{  	 
+    	System.out.println("Warte auf Verbindung...");
+        tcpListener = socket.accept();
+        tcpListener.setKeepAlive(true);
+        System.out.println("Verbindung eingegangen");
+        PrintStream myStream = new PrintStream(System.out) {
+            @Override
+            public void println(String message)
+            {
+                //System.out.println(message);
+                DataOutputStream outToClient;
+				try {
+					outToClient = new DataOutputStream(tcpListener.getOutputStream());
+					outToClient.writeBytes(message + "\r\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}              
+            }
+            @Override
+            public void print(String message)
+            {
+            	println(message);
+            }
+        };
+        System.setOut(myStream);      
         System.out.println("++++++++++++++++++++++++++++++++++MASTERMIND++++++++++++++++++++++++++++++++++");
         System.out.println("+                 Bitte nur vierstellige Zahlen eingeben!!!                  +");
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("");
         neuesSpiel();
         System.out.println("*************************** Danke und Tschuess!!! ****************************");
+        tcpListener.close();
+    	}
     }
 
     /**
@@ -54,7 +88,7 @@ public class MastermindServer {
      * @version 1.0.0
      * @throws IOException if an {@code IOException} occures in {@link Spieler#rateZahl() rateZahl}
      */
-    public void neuesSpiel() throws IOException
+    public void neuesSpiel() throws IOException  
     {
         Aufgabensteller aufgabensteller = new Aufgabensteller();
         Spieler spieler = new Spieler();         
@@ -68,9 +102,13 @@ public class MastermindServer {
             int anzahlVersuche = this.spielbrett.getAnzahlVersuche();
             
             // Der Spieler gibt eine Zahl ein und diese wird bewertet
-            System.out.print(String.format("Sie haben noch %d Versuch(e): ", maxAnzahlVersuche - anzahlVersuche));
-            Versuch versuch = aufgabensteller.bewerteRatezahl(spieler.rateZahl());
-            System.out.println();
+            System.out.println(String.format("Sie haben noch %d Versuch(e): ", maxAnzahlVersuche - anzahlVersuche));
+            // Netzwerk
+            BufferedReader bf = new BufferedReader(new InputStreamReader(tcpListener.getInputStream()));
+            System.out.println("GIVE ME NUMBER");            
+            String input = bf.readLine();
+            System.out.println(input);
+            Versuch versuch = aufgabensteller.bewerteRatezahl(Integer.parseInt(input));            
             spielbrett.protokolliereVersuch(versuch);
             anzahlVersuche++;
             // Wenn Treffer erzielt
@@ -78,7 +116,15 @@ public class MastermindServer {
             {
                 System.out.print(String.format("Volltreffer!!! Sie haben die Zahl im %d. Versuch erraten.\r\nMöchtest Sie noch mal spielen (1=JA - 2=NEIN)?\r\n", anzahlVersuche));
                 // Nochmalspielen? 1=JA 2=NEIN
-                int antwort = spieler.rateZahl();
+                // Netzwerk
+                bf = new BufferedReader(new InputStreamReader(tcpListener.getInputStream()));
+                System.out.println("GIVE ME NUMBER");            
+                input = bf.readLine();
+                System.out.println(input);
+                int antwort = Integer.parseInt(input);  
+                //System.out.println("GIVE ME NUMBER");
+                //inFromClient = new DataInputStream(tcpListener.getInputStream());
+                //int antwort = Integer.parseInt(inFromClient.readUTF());
                 if(antwort == 1)
                 {                    
                     this.spielbrett.ruecksetzenVersuche();
@@ -99,12 +145,18 @@ public class MastermindServer {
             {
                 // Alle Versuche ausgeben
                 System.out.println(this.spielbrett.liefereVersuche());
-                // Wenn keine Leben mehr
+                // Wenn keine Leben mehr        
                 if(maxAnzahlVersuche - anzahlVersuche == 0)
                 {
                     System.out.print(String.format("Looser!!! Du hast verloren, was ein Pech. Die Zahl war: %d. \r\n\r\nMöchtest Sie noch mal spielen (1=JA - 2=NEIN)?\r\n", aufgabensteller.getGeheimzahl()));  
                     // Nochmalspielen? 1=JA 2=NEIN  
-                    int antwort = spieler.rateZahl();
+
+                    // Netzwerk
+                    bf = new BufferedReader(new InputStreamReader(tcpListener.getInputStream()));
+                    System.out.println("GIVE ME NUMBER");            
+                    input = bf.readLine();
+                    System.out.println(input);
+                    int antwort = Integer.parseInt(input);                 
                     if(antwort == 1)
                     {
                         this.spielbrett.ruecksetzenVersuche();
