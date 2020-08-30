@@ -14,8 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class MastermindServer {
 
-	private final int maxAnzahlVersuche = 10;
-	private final Spielbrett spielbrett = new Spielbrett();
+	private final int maxAnzahlVersuche = 10;	 
 	private final int port = 12004;
 	ServerSocket socket;
 	Socket clientListener;
@@ -47,7 +46,7 @@ public class MastermindServer {
 		while (true) {
 			Socket listener = socket.accept();
 			System.out.println("Test");
-			Thread thread = new Thread(new Runnable() {				
+			Thread thread = new Thread(new Runnable() {
 				public void run() {
 					try {
 						Socket tcpListener = listener;
@@ -71,7 +70,7 @@ public class MastermindServer {
 								println(message);
 							}
 						};
-						//System.setOut(myStream);
+						// System.setOut(myStream);
 						myStream.println(
 								"++++++++++++++++++++++++++++++++++MASTERMIND++++++++++++++++++++++++++++++++++");
 						myStream.println(
@@ -111,15 +110,16 @@ public class MastermindServer {
 	 *                     {@link Spieler#rateZahl() rateZahl}
 	 */
 	public void neuesSpiel(Socket tcpListener, PrintStream myStream) throws IOException {
+		final Spielbrett spielbrett = new Spielbrett();
 		Aufgabensteller aufgabensteller = new Aufgabensteller();
 		Spieler spieler = new Spieler();
 
-		this.spielbrett.ruecksetzenVersuche();
+		spielbrett.ruecksetzenVersuche();
 		aufgabensteller.erzeugeGeheimzahl();
 
 		// Spielschleife, solange Spiel nicht beendet wird
 		while (true) {
-			int anzahlVersuche = this.spielbrett.getAnzahlVersuche();
+			int anzahlVersuche = spielbrett.getAnzahlVersuche();
 
 			// Der Spieler gibt eine Zahl ein und diese wird bewertet
 			myStream.println(String.format("Sie haben noch %d Versuch(e): ", maxAnzahlVersuche - anzahlVersuche));
@@ -147,7 +147,7 @@ public class MastermindServer {
 				// inFromClient = new DataInputStream(tcpListener.getInputStream());
 				// int antwort = Integer.parseInt(inFromClient.readUTF());
 				if (antwort == 1) {
-					this.spielbrett.ruecksetzenVersuche();
+					spielbrett.ruecksetzenVersuche();
 					aufgabensteller.erzeugeGeheimzahl();
 				} else if (antwort == 2) {
 					return;
@@ -159,7 +159,7 @@ public class MastermindServer {
 			// Wenn kein Treffer
 			else {
 				// Alle Versuche ausgeben
-				myStream.println(this.spielbrett.liefereVersuche());
+				myStream.println(spielbrett.liefereVersuche());
 				// Wenn keine Leben mehr
 				if (maxAnzahlVersuche - anzahlVersuche == 0) {
 					myStream.print(String.format(
@@ -174,7 +174,7 @@ public class MastermindServer {
 					myStream.println(input);
 					int antwort = Integer.parseInt(input);
 					if (antwort == 1) {
-						this.spielbrett.ruecksetzenVersuche();
+						spielbrett.ruecksetzenVersuche();
 						aufgabensteller.erzeugeGeheimzahl();
 					} else if (antwort == 2) {
 						return;
