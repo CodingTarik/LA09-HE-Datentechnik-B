@@ -29,26 +29,23 @@ public class Spieler {
         this.socket.setKeepAlive(true);
         this.outToServer = new DataOutputStream(socket.getOutputStream());
         this.inFromServer = new InputStreamReader(socket.getInputStream());
-
-        while (true)
-        {
+       
             BufferedReader bf = new BufferedReader(this.inFromServer);
             String read = "";
-            while(true) { 
-            	read = bf.readLine();
-            	String s = read;
-            	 
+            while((read = bf.readLine()) != null) {            
+            	String s = read;            	 
             	if(s.equals("GIVE ME NUMBER"))
             	{
             		int rateZahl = rateZahl();
-            		this.outToServer.writeBytes(Integer.toString(rateZahl)+"\r\n");
+            		this.outToServer.writeBytes(Integer.toString(rateZahl)+"\r\n");       
+            		 
             	}
             	else
             	{
             		System.out.println(s);
             	}
             }
-        }
+        
     }
     
     public static void main (String[] args) throws IOException
