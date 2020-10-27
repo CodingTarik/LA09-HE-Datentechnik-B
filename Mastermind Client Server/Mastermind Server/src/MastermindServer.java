@@ -17,7 +17,7 @@ public class MastermindServer {
 	private final int maxAnzahlVersuche = 10;	 
 	private final int port = 12004;
 	ServerSocket socket;
-	Socket clientListener;
+	//Socket clientListener;
 
 	/**
 	 * Erstellt eine neue Mastermind UI
@@ -31,7 +31,7 @@ public class MastermindServer {
 	}
 
 	/**
-	 * UI manager für das Spiel Mastermind und startet ein neues Spiel
+	 * UI manager fÃ¼r das Spiel Mastermind und startet ein neues Spiel
 	 * 
 	 * @category UI
 	 * @since 1.0.0
@@ -93,12 +93,12 @@ public class MastermindServer {
 	}
 
 	/**
-	 * setzt die im Spielbrett gespeicherten Versuche zurück und lässt vom
+	 * setzt die im Spielbrett gespeicherten Versuche zurÃ¼ck und lÃ¤sst vom
 	 * Aufgabensteller eine Geheimzahl erzeugen. Der Spieler wird zur Eingabe der
 	 * Ratezahl aufgefordert. Diese wird dann zur Bewertung an den Aufgabensteller
 	 * weitergegeben. Resultat der Bewertung ist ein Objekt der Klasse Versuch.
-	 * Anschließend wird das Versuchsobjekt dem Spielbrett zum Protokollieren
-	 * übergeben und alle im Spielbrett gespeicherten Versuche werden angezeigt.
+	 * AnschlieÃŸend wird das Versuchsobjekt dem Spielbrett zum Protokollieren
+	 * Ã¼bergeben und alle im Spielbrett gespeicherten Versuche werden angezeigt.
 	 * Das Spiel wird beendet, wenn die Anzahl der im aktuellen Versuch
 	 * gespeicherten direkten Treffer gleich vier ist oder die vorgegebene Anzahl
 	 * der Versuche erreicht wurde.
@@ -134,7 +134,7 @@ public class MastermindServer {
 			// Wenn Treffer erzielt
 			if (versuch.getDirekteTreffer() == 4) {
 				myStream.println(String.format(
-						"Volltreffer!!! Sie haben die Zahl im %d. Versuch erraten.\r\nMöchtest Sie noch mal spielen (1=JA - 2=NEIN)?\r\n",
+						"Volltreffer!!! Sie haben die Zahl im %d. Versuch erraten.\r\nMÃ¶chtest Sie noch mal spielen (1=JA - 2=NEIN)?\r\n",
 						anzahlVersuche));
 				// Nochmalspielen? 1=JA 2=NEIN
 				// Netzwerk
@@ -152,7 +152,7 @@ public class MastermindServer {
 				} else if (antwort == 2) {
 					return;
 				} else {
-					myStream.println("Layer-8-Fehler: Ung�ltige Eingabe");
+					myStream.println("Layer-8-Fehler: Ungültige Eingabe");
 					return;
 				}
 			}
@@ -163,7 +163,7 @@ public class MastermindServer {
 				// Wenn keine Leben mehr
 				if (maxAnzahlVersuche - anzahlVersuche == 0) {
 					myStream.print(String.format(
-							"Looser!!! Du hast verloren, was ein Pech. Die Zahl war: %d. \r\n\r\nM�chtest Sie noch mal spielen (1=JA - 2=NEIN)?\r\n",
+							"Looser!!! Du hast verloren, was ein Pech. Die Zahl war: %d. \r\n\r\nMöchtest Sie noch mal spielen (1=JA - 2=NEIN)?\r\n",
 							aufgabensteller.getGeheimzahl()));
 					// Nochmalspielen? 1=JA 2=NEIN
 
@@ -179,7 +179,7 @@ public class MastermindServer {
 					} else if (antwort == 2) {
 						return;
 					} else {
-						myStream.println("Layer-8-Fehler: Ung�ltige Eingabe");
+						myStream.println("Layer-8-Fehler: Ungültige Eingabe");
 						return;
 					}
 				}
